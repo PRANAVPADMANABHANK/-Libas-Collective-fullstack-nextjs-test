@@ -26,7 +26,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Advanced fitness tracking watch with heart rate monitor, GPS, and smartphone connectivity. Track your health goals effortlessly.",
     price: 299.99,
-    image: "/smart-fitness-watch.png",
+    image: "/placeholder.svg",
     category: "Electronics",
     inStock: true,
     slug: "smart-fitness-watch",
@@ -41,7 +41,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Comfortable and sustainable organic cotton t-shirt. Available in multiple colors and sizes. Perfect for everyday wear.",
     price: 29.99,
-    image: "/organic-cotton-t-shirt.png",
+    image: "/organic-cotton-tshirt.png",
     category: "Clothing",
     inStock: true,
     slug: "organic-cotton-t-shirt",
@@ -55,7 +55,7 @@ const DUMMY_PRODUCTS: Product[] = [
     name: "Professional Camera Lens",
     description: "High-quality 50mm prime lens for professional photography. Sharp images with beautiful bokeh effect.",
     price: 599.99,
-    image: "/camera-lens.png",
+    image: "/placeholder.svg",
     category: "Electronics",
     inStock: true,
     slug: "professional-camera-lens",
@@ -70,7 +70,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Comfortable ergonomic office chair with lumbar support and adjustable height. Perfect for long work sessions.",
     price: 399.99,
-    image: "/office-chair.png",
+    image: "/ergonomic-office-chair.png",
     category: "Furniture",
     inStock: true,
     slug: "ergonomic-office-chair",
@@ -85,7 +85,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Insulated stainless steel water bottle that keeps drinks cold for 24 hours or hot for 12 hours. BPA-free and eco-friendly.",
     price: 34.99,
-    image: "/water-bottle.png",
+    image: "/stainless-steel-bottle.png",
     category: "Home & Garden",
     inStock: true,
     slug: "stainless-steel-water-bottle",
