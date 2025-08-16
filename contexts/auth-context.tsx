@@ -10,7 +10,14 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth"
-import { auth } from "@/lib/firebase"
+
+let auth: any = null
+try {
+  const firebase = require("@/lib/firebase")
+  auth = firebase.auth
+} catch (error) {
+  console.warn("[v0] Firebase not available, using mock auth")
+}
 
 interface AuthContextType {
   user: User | null
@@ -27,24 +34,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
+    if (!auth) {
       setLoading(false)
-    })
+      return
+    }
 
-    return unsubscribe
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user)
+        setLoading(false)
+      })
+      return unsubscribe
+    } catch (error) {
+      console.error("[v0] Auth state change error:", error)
+      setLoading(false)
+    }
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    if (!auth) throw new Error("Firebase not initialized")
     await signInWithEmailAndPassword(auth, email, password)
   }
 
   const signUp = async (email: string, password: string, name: string) => {
+    if (!auth) throw new Error("Firebase not initialized")
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
     await updateProfile(user, { displayName: name })
   }
 
   const logout = async () => {
+    if (!auth) throw new Error("Firebase not initialized")
     await signOut(auth)
   }
 

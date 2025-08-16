@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, addDoc } from "firebase/firestore"
+import { getFirestore, collection, addDoc, getDocs, deleteDoc } from "firebase/firestore"
 
 const firebaseConfig = {
-  // Add your Firebase config here
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id",
+  apiKey: "AIzaSyD_FWLIHzDLCOUSwGsm-ZDmHFpLY5ez3p0",
+  authDomain: "libas-collective-fullstack.firebaseapp.com",
+  projectId: "libas-collective-fullstack",
+  storageBucket: "libas-collective-fullstack.firebasestorage.app",
+  messagingSenderId: "318134831083",
+  appId: "1:318134831083:web:dbe4f56c3f4a14eb793bae",
+  measurementId: "G-ZFNMGYRHK4",
 }
 
 const app = initializeApp(firebaseConfig)
@@ -94,16 +94,27 @@ const sampleProducts = [
 
 async function seedProducts() {
   try {
+    console.log("🔥 Starting Firebase seeding process...")
+
     const productsRef = collection(db, "products")
+    const existingProducts = await getDocs(productsRef)
+
+    console.log(`📦 Found ${existingProducts.size} existing products, clearing them...`)
+    for (const doc of existingProducts.docs) {
+      await deleteDoc(doc.ref)
+    }
+
+    console.log("✅ Cleared existing products, adding new ones...")
 
     for (const product of sampleProducts) {
       await addDoc(productsRef, product)
-      console.log(`Added product: ${product.name}`)
+      console.log(`✅ Added product: ${product.name}`)
     }
 
-    console.log("Successfully seeded all products!")
+    console.log("🎉 Successfully seeded all products!")
+    console.log(`📊 Total products added: ${sampleProducts.length}`)
   } catch (error) {
-    console.error("Error seeding products:", error)
+    console.error("❌ Error seeding products:", error)
   }
 }
 
