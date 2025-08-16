@@ -16,7 +16,7 @@ try {
   const firebase = require("@/lib/firebase")
   auth = firebase.auth
 } catch (error) {
-  console.warn("[v0] Firebase not available, using mock auth")
+  console.warn("[ShopHub] Firebase not available, using mock auth")
 }
 
 interface AuthContextType {
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
       return unsubscribe
     } catch (error) {
-      console.error("[v0] Auth state change error:", error)
+      console.error("[ShopHub] Auth state change error:", error)
       setLoading(false)
     }
   }, [])

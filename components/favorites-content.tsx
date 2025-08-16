@@ -31,7 +31,7 @@ export function FavoritesContent() {
         const products = await Promise.all(favorites.map((id) => getProductById(id)))
         setFavoriteProducts(products.filter((product): product is Product => product !== null))
       } catch (error) {
-        console.error("[v0] Error loading favorite products:", error)
+        console.error("[ShopHub] Error loading favorite products:", error)
         setFavoriteProducts([])
       } finally {
         setLoading(false)

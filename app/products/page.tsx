@@ -16,7 +16,8 @@ interface ProductsPageProps {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   // Server-side rendering - fetch products on each request
-  const { category, sort = "name", page = "1" } = searchParams
+  const params = await searchParams
+  const { category, sort = "name", page = "1" } = params
 
   let products = category ? await getProductsByCategory(category) : await getAllProducts()
 

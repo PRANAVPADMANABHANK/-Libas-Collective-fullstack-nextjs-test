@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import { AuthProvider } from "@/contexts/auth-context"
+import { FavoritesProvider } from "@/contexts/favorites-context"
 import { StructuredData } from "@/components/structured-data"
 
 export const metadata: Metadata = {
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
     yandex: "yandex-verification-code",
     yahoo: "yahoo-site-verification-code",
   },
-  generator: "v0.app",
+  generator: "Next.js",
 }
 
 interface RootLayoutProps {
@@ -99,7 +100,11 @@ html {
         `}</style>
       </head>
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            {children}
+          </FavoritesProvider>
+        </AuthProvider>
       </body>
     </html>
   )

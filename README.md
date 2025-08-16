@@ -1,30 +1,139 @@
-# Web app full code
+# Libas Collective - E-commerce Platform
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A modern, full-stack e-commerce platform built with Next.js 15, Firebase, and TypeScript.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/pranavs-projects-98d9b217/v0-web-app-full-code)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/2lk055b2CXC)
+## 🚀 Features
 
-## Overview
+- **Modern Tech Stack**: Next.js 15, React 19, TypeScript
+- **Firebase Integration**: Authentication, Firestore database, real-time updates
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Real-time Favorites**: Live updates for user favorites
+- **Product Management**: Categories, search, filtering, and pagination
+- **Shopping Cart**: Persistent cart with local storage
+- **SEO Optimized**: Meta tags, structured data, and sitemap generation
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## 🛠️ Tech Stack
 
-## Deployment
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, Radix UI components
+- **Backend**: Firebase (Auth, Firestore, Functions)
+- **Database**: Firestore (NoSQL)
+- **Deployment**: Vercel-ready
 
-Your project is live at:
+## 📁 Project Structure
 
-**[https://vercel.com/pranavs-projects-98d9b217/v0-web-app-full-code](https://vercel.com/pranavs-projects-98d9b217/v0-web-app-full-code)**
+```
+├── app/                    # Next.js app router pages
+├── components/            # Reusable UI components
+├── contexts/             # React context providers
+├── hooks/                # Custom React hooks
+├── lib/                  # Utility functions and Firebase config
+├── public/               # Static assets
+└── scripts/              # Database seeding scripts
+```
 
-## Build your app
+## 🚀 Getting Started
 
-Continue building your app on:
+### Prerequisites
 
-**[https://v0.app/chat/projects/2lk055b2CXC](https://v0.app/chat/projects/2lk055b2CXC)**
+- Node.js 18+ 
+- npm or pnpm
+- Firebase project
 
-## How It Works
+### Installation
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd libas-collective-shop
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+
+3. **Set up Firebase**
+   - Create a Firebase project
+   - Download `serviceAccountKey.json` to project root
+   - Update Firebase configuration in `lib/firebase.ts`
+
+4. **Seed the database**
+   ```bash
+   npm run seed
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run seed` - Seed Firestore with sample data
+
+## 🌟 Key Features
+
+### Real-time Favorites System
+- Users can add/remove products to favorites
+- Real-time updates across all components
+- Persistent storage in Firestore
+
+### Product Management
+- Product categories and filtering
+- Advanced search functionality
+- Product detail pages with related products
+
+### Shopping Cart
+- Add/remove products
+- Persistent cart data
+- Quantity management
+
+### Authentication
+- Email/password authentication
+- User profile management
+- Protected routes
+
+## 📱 Responsive Design
+
+The platform is built with a mobile-first approach and includes:
+- Responsive navigation
+- Mobile-optimized product grids
+- Touch-friendly interactions
+- Adaptive layouts for all screen sizes
+
+## 🔒 Security
+
+- Firebase security rules
+- Protected API routes
+- User authentication
+- Data validation
+
+## 🚀 Deployment
+
+The project is configured for easy deployment on Vercel:
+
+1. Connect your GitHub repository
+2. Set environment variables
+3. Deploy with automatic builds
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For support and questions, please open an issue in the GitHub repository.

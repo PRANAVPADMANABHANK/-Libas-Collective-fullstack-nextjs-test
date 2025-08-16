@@ -13,7 +13,8 @@ interface SearchPageProps {
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q: query = "", page = "1" } = searchParams
+  const params = await searchParams
+  const { q: query = "", page = "1" } = params
 
   // Server-side search
   const products = query ? await searchProducts(query) : []

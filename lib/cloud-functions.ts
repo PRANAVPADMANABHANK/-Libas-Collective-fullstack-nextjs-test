@@ -4,7 +4,7 @@ import { functions, isFirebaseConfigured } from "./firebase"
 // Get product recommendations
 export const getProductRecommendations = async (limit = 5) => {
   if (!isFirebaseConfigured()) {
-    console.log("[v0] Firebase not configured, skipping recommendations")
+    console.log("[ShopHub] Firebase not configured, skipping recommendations")
     return { recommendations: [], reason: "firebase-not-configured" }
   }
 
@@ -13,7 +13,7 @@ export const getProductRecommendations = async (limit = 5) => {
     const result = await getRecommendations({ limit })
     return result.data
   } catch (error) {
-    console.error("[v0] Error getting product recommendations:", error)
+    console.error("[ShopHub] Error getting product recommendations:", error)
     return { recommendations: [], reason: "error" }
   }
 }
@@ -21,7 +21,7 @@ export const getProductRecommendations = async (limit = 5) => {
 // Update product view count
 export const updateProductViews = async (productId: string) => {
   if (!isFirebaseConfigured()) {
-    console.log("[v0] Firebase not configured, skipping view count update")
+    console.log("[ShopHub] Firebase not configured, skipping view count update")
     return
   }
 
@@ -29,14 +29,14 @@ export const updateProductViews = async (productId: string) => {
     const updateViews = httpsCallable(functions, "updateProductViews")
     await updateViews({ productId })
   } catch (error) {
-    console.error("[v0] Error updating product views:", error)
+    console.error("[ShopHub] Error updating product views:", error)
   }
 }
 
 // Get analytics data (admin only)
 export const getAnalytics = async () => {
   if (!isFirebaseConfigured()) {
-    console.log("[v0] Firebase not configured, skipping analytics")
+    console.log("[ShopHub] Firebase not configured, skipping analytics")
     return null
   }
 
@@ -45,7 +45,7 @@ export const getAnalytics = async () => {
     const result = await getAnalyticsData()
     return result.data
   } catch (error) {
-    console.error("[v0] Error getting analytics:", error)
+    console.error("[ShopHub] Error getting analytics:", error)
     return null
   }
 }
