@@ -37,3 +37,12 @@ export function OrganizationJsonLd() {
 
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 }
+
+export function StructuredData() {
+  return (
+    <>
+      <WebsiteJsonLd />
+      <OrganizationJsonLd />
+    </>
+  )
+}

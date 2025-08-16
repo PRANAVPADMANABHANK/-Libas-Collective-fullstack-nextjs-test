@@ -7,14 +7,26 @@ export function useCart() {
   const [items, setItems] = useState<CartItem[]>([])
 
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart")
-    if (savedCart) {
-      setItems(JSON.parse(savedCart))
+    if (typeof window === "undefined" || !window.localStorage) return
+
+    try {
+      const savedCart = localStorage.getItem("cart")
+      if (savedCart) {
+        setItems(JSON.parse(savedCart))
+      }
+    } catch (error) {
+      console.log("Error loading cart from localStorage:", error)
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(items))
+    if (typeof window === "undefined" || !window.localStorage) return
+
+    try {
+      localStorage.setItem("cart", JSON.stringify(items))
+    } catch (error) {
+      console.log("Error saving cart to localStorage:", error)
+    }
   }, [items])
 
   const addItem = (product: Product, quantity = 1) => {

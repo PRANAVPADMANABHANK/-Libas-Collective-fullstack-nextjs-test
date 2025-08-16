@@ -1,7 +1,5 @@
-/*
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore"
-import { db } from "./firebase"
-*/
+import { collection, getDocs, query, where, orderBy, doc, getDoc } from "firebase/firestore"
+import { db, isFirebaseConfigured } from "./firebase"
 import type { Product } from "./types"
 
 const DUMMY_PRODUCTS: Product[] = [
@@ -26,7 +24,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Advanced fitness tracking watch with heart rate monitor, GPS, and smartphone connectivity. Track your health goals effortlessly.",
     price: 299.99,
-    image: "/placeholder.svg",
+    image: "/smart-fitness-watch.png",
     category: "Electronics",
     inStock: true,
     slug: "smart-fitness-watch",
@@ -55,7 +53,7 @@ const DUMMY_PRODUCTS: Product[] = [
     name: "Professional Camera Lens",
     description: "High-quality 50mm prime lens for professional photography. Sharp images with beautiful bokeh effect.",
     price: 599.99,
-    image: "/placeholder.svg",
+    image: "/camera-lens.png",
     category: "Electronics",
     inStock: true,
     slug: "professional-camera-lens",
@@ -70,7 +68,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Comfortable ergonomic office chair with lumbar support and adjustable height. Perfect for long work sessions.",
     price: 399.99,
-    image: "/ergonomic-office-chair.png",
+    image: "/office-chair.png",
     category: "Furniture",
     inStock: true,
     slug: "ergonomic-office-chair",
@@ -85,7 +83,7 @@ const DUMMY_PRODUCTS: Product[] = [
     description:
       "Insulated stainless steel water bottle that keeps drinks cold for 24 hours or hot for 12 hours. BPA-free and eco-friendly.",
     price: 34.99,
-    image: "/stainless-steel-bottle.png",
+    image: "/water-bottle.png",
     category: "Home & Garden",
     inStock: true,
     slug: "stainless-steel-water-bottle",
@@ -97,64 +95,161 @@ const DUMMY_PRODUCTS: Product[] = [
 ]
 
 export async function getAllProducts(): Promise<Product[]> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  return DUMMY_PRODUCTS
+  if (!isFirebaseConfigured()) {
+    console.log("[v0] Firebase not configured, using dummy data")
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    return DUMMY_PRODUCTS
+  }
+
+  try {
+    const productsRef = collection(db, "products")
+    const q = query(productsRef, orderBy("name"))
+    const querySnapshot = await getDocs(q)
+
+    const products: Product[] = []
+    querySnapshot.forEach((doc) => {
+      products.push({ id: doc.id, ...doc.data() } as Product)
+    })
+
+    return products
+  } catch (error) {
+    console.error("[v0] Error fetching products from Firestore:", error)
+    return DUMMY_PRODUCTS
+  }
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  return DUMMY_PRODUCTS.find((product) => product.slug === slug) || null
+  if (!isFirebaseConfigured()) {
+    console.log("[v0] Firebase not configured, using dummy data")
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    return DUMMY_PRODUCTS.find((product) => product.slug === slug) || null
+  }
+
+  try {
+    const productsRef = collection(db, "products")
+    const q = query(productsRef, where("slug", "==", slug))
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      return null
+    }
+
+    const doc = querySnapshot.docs[0]
+    return { id: doc.id, ...doc.data() } as Product
+  } catch (error) {
+    console.error("[v0] Error fetching product by slug from Firestore:", error)
+    return DUMMY_PRODUCTS.find((product) => product.slug === slug) || null
+  }
 }
 
 export async function getProductsByCategory(category: string): Promise<Product[]> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  return DUMMY_PRODUCTS.filter((product) => product.category === category)
+  if (!isFirebaseConfigured()) {
+    console.log("[v0] Firebase not configured, using dummy data")
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    return DUMMY_PRODUCTS.filter((product) => product.category === category)
+  }
+
+  try {
+    const productsRef = collection(db, "products")
+    const q = query(productsRef, where("category", "==", category), orderBy("name"))
+    const querySnapshot = await getDocs(q)
+
+    const products: Product[] = []
+    querySnapshot.forEach((doc) => {
+      products.push({ id: doc.id, ...doc.data() } as Product)
+    })
+
+    return products
+  } catch (error) {
+    console.error("[v0] Error fetching products by category from Firestore:", error)
+    return DUMMY_PRODUCTS.filter((product) => product.category === category)
+  }
 }
 
 export async function searchProducts(searchTerm: string): Promise<Product[]> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  const lowercaseSearch = searchTerm.toLowerCase()
+  if (!isFirebaseConfigured()) {
+    console.log("[v0] Firebase not configured, using dummy data")
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const lowercaseSearch = searchTerm.toLowerCase()
 
-  return DUMMY_PRODUCTS.filter(
-    (product) =>
-      product.name.toLowerCase().includes(lowercaseSearch) ||
-      product.description.toLowerCase().includes(lowercaseSearch) ||
-      product.category.toLowerCase().includes(lowercaseSearch) ||
-      product.tags?.some((tag) => tag.toLowerCase().includes(lowercaseSearch)),
-  )
+    return DUMMY_PRODUCTS.filter(
+      (product) =>
+        product.name.toLowerCase().includes(lowercaseSearch) ||
+        product.description.toLowerCase().includes(lowercaseSearch) ||
+        product.category.toLowerCase().includes(lowercaseSearch) ||
+        product.tags?.some((tag) => tag.toLowerCase().includes(lowercaseSearch)),
+    )
+  }
+
+  try {
+    // Note: Firestore doesn't support full-text search natively
+    // For production, consider using Algolia or similar service
+    const productsRef = collection(db, "products")
+    const querySnapshot = await getDocs(productsRef)
+
+    const products: Product[] = []
+    querySnapshot.forEach((doc) => {
+      products.push({ id: doc.id, ...doc.data() } as Product)
+    })
+
+    const lowercaseSearch = searchTerm.toLowerCase()
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(lowercaseSearch) ||
+        product.description.toLowerCase().includes(lowercaseSearch) ||
+        product.category.toLowerCase().includes(lowercaseSearch) ||
+        product.tags?.some((tag) => tag.toLowerCase().includes(lowercaseSearch)),
+    )
+  } catch (error) {
+    console.error("[v0] Error searching products in Firestore:", error)
+    return searchProducts(searchTerm) // Fallback to dummy data search
+  }
 }
 
 export async function searchProductsAdvanced(searchTerm: string): Promise<Product[]> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
+  const products = await searchProducts(searchTerm)
   const lowercaseSearch = searchTerm.toLowerCase()
   const searchWords = lowercaseSearch.split(" ").filter((word) => word.length > 0)
 
-  return DUMMY_PRODUCTS.filter((product) => {
-    const searchableText = [product.name, product.description, product.category, ...(product.tags || [])]
-      .join(" ")
-      .toLowerCase()
+  return products
+    .filter((product) => {
+      const searchableText = [product.name, product.description, product.category, ...(product.tags || [])]
+        .join(" ")
+        .toLowerCase()
 
-    // Check if all search words are found
-    return searchWords.every((word) => searchableText.includes(word))
-  }).sort((a, b) => {
-    // Sort by relevance - exact name matches first
-    const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch)
-    const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch)
+      return searchWords.every((word) => searchableText.includes(word))
+    })
+    .sort((a, b) => {
+      const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch)
+      const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch)
 
-    if (aNameMatch && !bNameMatch) return -1
-    if (!aNameMatch && bNameMatch) return 1
+      if (aNameMatch && !bNameMatch) return -1
+      if (!aNameMatch && bNameMatch) return 1
 
-    return a.name.localeCompare(b.name)
-  })
+      return a.name.localeCompare(b.name)
+    })
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  // Simulate async operation
-  await new Promise((resolve) => setTimeout(resolve, 100))
-  return DUMMY_PRODUCTS.find((product) => product.id === id) || null
+  if (!isFirebaseConfigured()) {
+    console.log("[v0] Firebase not configured, using dummy data")
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    return DUMMY_PRODUCTS.find((product) => product.id === id) || null
+  }
+
+  try {
+    const productRef = doc(db, "products", id)
+    const productSnap = await getDoc(productRef)
+
+    if (productSnap.exists()) {
+      return { id: productSnap.id, ...productSnap.data() } as Product
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error("[v0] Error fetching product by ID from Firestore:", error)
+    return DUMMY_PRODUCTS.find((product) => product.id === id) || null
+  }
 }
+
+export { DUMMY_PRODUCTS }

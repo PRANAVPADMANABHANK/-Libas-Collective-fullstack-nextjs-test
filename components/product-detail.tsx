@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { ShoppingCart, Heart, Share2, Star } from "lucide-react"
+import { ShoppingCart, Share2, Star } from "lucide-react"
 import { useCart } from "@/hooks/use-cart"
+import { FavoriteButton } from "@/components/favorite-button"
 import type { Product } from "@/lib/types"
 
 interface ProductDetailProps {
@@ -24,7 +25,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
   }
 
   const handleShare = async () => {
-    if (navigator.share) {
+    if (typeof window === "undefined") return
+
+    if (navigator?.share) {
       try {
         await navigator.share({
           title: product.name,
@@ -34,9 +37,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
       } catch (error) {
         console.log("Error sharing:", error)
       }
-    } else {
+    } else if (navigator?.clipboard) {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href)
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+      } catch (error) {
+        console.log("Error copying to clipboard:", error)
+      }
     }
   }
 
@@ -144,9 +151,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 {product.inStock ? "Add to Cart" : "Out of Stock"}
               </Button>
-              <Button variant="outline" size="lg">
-                <Heart className="h-4 w-4" />
-              </Button>
+              <FavoriteButton productId={product.id} size="lg" />
               <Button variant="outline" size="lg" onClick={handleShare}>
                 <Share2 className="h-4 w-4" />
               </Button>

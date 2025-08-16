@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
+import { AuthProvider } from "@/contexts/auth-context"
+import { StructuredData } from "@/components/structured-data"
 
 export const metadata: Metadata = {
   title: {
@@ -73,17 +75,21 @@ export const metadata: Metadata = {
     yandex: "yandex-verification-code",
     yahoo: "yahoo-site-verification-code",
   },
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+interface RootLayoutProps {
+  readonly children: React.ReactNode
+}
+
+/**
+ * Root layout component that wraps all pages with necessary providers and global elements
+ */
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
+        <StructuredData />
         <style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};
@@ -92,7 +98,9 @@ html {
 }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }
