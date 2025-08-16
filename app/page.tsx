@@ -9,7 +9,7 @@ import { FeaturedProducts } from "@/components/featured-products"
 import { CategoryGrid } from "@/components/category-grid"
 import { Footer } from "@/components/footer"
 import { WebsiteJsonLd, OrganizationJsonLd } from "@/components/structured-data"
-import { FEATURED_PRODUCTS_COUNT, REVALIDATE_INTERVAL } from "@/lib/constants"
+import { FEATURED_PRODUCTS_COUNT } from "@/lib/constants"
 
 /**
  * Homepage component that renders the main landing page
@@ -47,4 +47,4 @@ export default async function HomePage() {
 }
 
 // Enable static generation with revalidation
-export const revalidate = REVALIDATE_INTERVAL
+export const revalidate = 3600 // 1 hour in seconds

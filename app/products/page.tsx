@@ -7,11 +7,11 @@ import { ProductFilters } from "@/components/product-filters"
 import { ProductGridSkeleton } from "@/components/product-grid-skeleton"
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     category?: string
     sort?: string
     page?: string
-  }
+  }>
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
@@ -67,5 +67,5 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   )
 }
 
-// Force dynamic rendering for SSR
-export const dynamic = "force-dynamic"
+// Static generation with revalidation
+export const revalidate = 3600 // 1 hour

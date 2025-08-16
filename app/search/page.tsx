@@ -6,10 +6,10 @@ import { SearchResults } from "@/components/search-results"
 import { ProductGridSkeleton } from "@/components/product-grid-skeleton"
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     q?: string
     page?: string
-  }
+  }>
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -54,5 +54,5 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   )
 }
 
-// Force dynamic rendering for search
-export const dynamic = "force-dynamic"
+// Static generation with revalidation
+export const revalidate = 3600 // 1 hour
