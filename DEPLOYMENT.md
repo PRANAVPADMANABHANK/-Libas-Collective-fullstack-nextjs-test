@@ -20,7 +20,7 @@
 - ✅ Firebase Project ID
 - ✅ Firebase Storage Bucket
 - ✅ Firebase Messaging Sender ID
-- ✅ Firebase App ID
+- ✅ Firebase App ID   
 - ✅ Firebase Measurement ID
 
 ### **Performance Metrics**
@@ -47,3 +47,22 @@
 ---
 
 **Project Status**: 🎯 **100% COMPLETE AND PRODUCTION READY**
+
+---
+
+## 📝 **Deployment Notes**
+
+<!-- 
+  Add your deployment notes, configuration details, or any important information here.
+  
+  Example notes:
+  - Vercel project name: libas-collective-shop
+  - Firebase project ID: your-project-id
+  - Custom domain: yourdomain.com (if applicable)
+  - Environment: Production
+  - Last deployment: [Date and time]
+  - Build time: [Duration]
+  - Bundle size: [Size in KB/MB]
+  
+  Remember to update the Vercel URL above when you have it!
+-->
