@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { OTPData, OTPVerificationRequest, OTPResponse } from '@/lib/otp-types'
 
-export async function POST(request: NextRequest) {
+// In-memory OTP store (in production, use Redis or database)
+const otpStore = new Map<string, OTPData>()
+
+export async function POST(request: NextRequest): Promise<NextResponse<OTPResponse>> {
   console.log('🚀 API route: verify-otp triggered')
   
   try {
-    const { email, otp } = await request.json()
+    const { email, otp }: OTPVerificationRequest = await request.json()
     
     console.log('🔐 OTP verification request:', { email, otp })
     
@@ -16,16 +20,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if OTP store exists
-    if (!global.otpStore) {
-      console.log('❌ No OTP found for this email')
-      return NextResponse.json(
-        { success: false, error: 'OTP expired or not found' },
-        { status: 400 }
-      )
-    }
-
-    const otpData = global.otpStore.get(email)
+    // Check if OTP exists
+    const otpData = otpStore.get(email)
     
     if (!otpData) {
       console.log('❌ No OTP found for email:', email)
@@ -42,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     if (otpAge > maxAge) {
       console.log('❌ OTP expired for email:', email)
-      global.otpStore.delete(email)
+      otpStore.delete(email)
       return NextResponse.json(
         { success: false, error: 'OTP has expired. Please request a new one.' },
         { status: 400 }
@@ -52,7 +48,7 @@ export async function POST(request: NextRequest) {
     // Check if too many attempts
     if (otpData.attempts >= 3) {
       console.log('❌ Too many OTP attempts for email:', email)
-      global.otpStore.delete(email)
+      otpStore.delete(email)
       return NextResponse.json(
         { success: false, error: 'Too many failed attempts. Please request a new OTP.' },
         { status: 400 }
@@ -65,7 +61,7 @@ export async function POST(request: NextRequest) {
       
       // Increment attempts
       otpData.attempts += 1
-      global.otpStore.set(email, otpData)
+      otpStore.set(email, otpData)
       
       return NextResponse.json(
         { success: false, error: 'Invalid OTP. Please try again.' },
@@ -74,7 +70,7 @@ export async function POST(request: NextRequest) {
     }
 
     // OTP is valid - remove it from store
-    global.otpStore.delete(email)
+    otpStore.delete(email)
     
     console.log('✅ OTP verified successfully for email:', email)
     

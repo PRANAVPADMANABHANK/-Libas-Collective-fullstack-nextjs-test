@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { OTPData, OTPRequest, OTPResponse } from '@/lib/otp-types'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function POST(request: NextRequest) {
+// In-memory OTP store (in production, use Redis or database)
+const otpStore = new Map<string, OTPData>()
+
+export async function POST(request: NextRequest): Promise<NextResponse<OTPResponse>> {
   console.log('🚀 API route: send-otp triggered')
   
   try {
-    const { email, displayName } = await request.json()
+    const { email, displayName }: OTPRequest = await request.json()
     
     console.log('📧 OTP request:', { email, displayName })
     
@@ -33,14 +37,8 @@ export async function POST(request: NextRequest) {
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     
-    // Store OTP in memory (in production, use Redis or database)
-    // For now, we'll use a simple Map (this will reset on server restart)
-    if (!global.otpStore) {
-      global.otpStore = new Map()
-    }
-    
     // Store OTP with email and timestamp
-    global.otpStore.set(email, {
+    otpStore.set(email, {
       otp,
       timestamp: Date.now(),
       attempts: 0
@@ -48,9 +46,7 @@ export async function POST(request: NextRequest) {
     
     // OTP expires in 10 minutes
     setTimeout(() => {
-      if (global.otpStore) {
-        global.otpStore.delete(email)
-      }
+      otpStore.delete(email)
     }, 10 * 60 * 1000)
 
     console.log('📧 Initializing Resend client...')
