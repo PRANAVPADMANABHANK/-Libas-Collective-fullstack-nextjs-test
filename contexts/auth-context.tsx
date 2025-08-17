@@ -5,8 +5,10 @@ import { createContext, useContext, useEffect, useState } from "react"
 import {
   type User,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth"
 
 let auth: any = null
@@ -21,6 +23,7 @@ interface AuthContextType {
   user: User | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, name: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -53,7 +56,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password)
   }
 
-
+  const signUp = async (email: string, password: string, name: string) => {
+    if (!auth) throw new Error("Firebase not initialized")
+    
+    console.log('🚀 Starting user registration process...')
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+    console.log('✅ User created successfully:', user.uid)
+    
+    await updateProfile(user, { displayName: name })
+    console.log('✅ User profile updated with display name')
+    
+    // Call Cloud Function to send welcome email
+    try {
+      console.log('📧 Calling Cloud Function to send welcome email...')
+      const response = await fetch('/api/send-welcome-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          displayName: name,
+          uid: user.uid
+        }),
+      })
+      
+      const result = await response.json()
+      console.log('📧 Welcome email result:', result)
+      
+      if (result.success) {
+        console.log('✅ Welcome email sent successfully!')
+      } else {
+        console.log('⚠️ Welcome email failed:', result.error)
+      }
+    } catch (error) {
+      console.error('❌ Error calling welcome email function:', error)
+      // Don't throw error - user registration should still succeed
+    }
+  }
 
   const logout = async () => {
     if (!auth) throw new Error("Firebase not initialized")
@@ -64,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     signIn,
+    signUp,
     logout,
   }
 

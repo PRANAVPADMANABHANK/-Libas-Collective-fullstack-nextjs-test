@@ -101,16 +101,16 @@ export function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/login">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild>
-      
-                </Button>
-              </div>
-            )}
+                         ) : (
+               <div className="flex gap-2">
+                 <Button variant="outline" size="sm" asChild>
+                   <Link href="/login">Sign In</Link>
+                 </Button>
+                 <Button size="sm" asChild>
+                   <Link href="/register">Sign Up</Link>
+                 </Button>
+               </div>
+             )}
           </nav>
         </div>
       </div>
