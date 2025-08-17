@@ -1,4 +1,9 @@
 🚀 ShopHub - Full Project Documentation
+
+Github link : https://github.com/PRANAVPADMANABHANK/-Libas-Collective-fullstack-nextjs-test
+Live link     : https://libas-collective-fullstack-nextjs-t.vercel.app/
+
+
    Project Overview
 ShopHub is a comprehensive e-commerce platform built with Next.js 15, Firebase, and Resend email services. The project features user authentication, OTP verification, product management, shopping cart, favorites system, and professional email communication.
 
