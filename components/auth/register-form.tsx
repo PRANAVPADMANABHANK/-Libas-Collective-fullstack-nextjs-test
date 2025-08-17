@@ -16,14 +16,106 @@ export function RegisterForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [otp, setOtp] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [otpSent, setOtpSent] = useState(false)
+  const [otpVerified, setOtpVerified] = useState(false)
+  const [sendingOtp, setSendingOtp] = useState(false)
+  const [verifyingOtp, setVerifyingOtp] = useState(false)
   const { signUp } = useAuth()
   const router = useRouter()
+
+  const handleSendOtp = async () => {
+    if (!email || !name) {
+      setError("Please fill in your name and email first")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters")
+      return
+    }
+
+    setSendingOtp(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          displayName: name
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setOtpSent(true)
+        setError("")
+      } else {
+        setError(result.error || "Failed to send OTP")
+      }
+    } catch (error: any) {
+      setError("Failed to send OTP. Please try again.")
+    } finally {
+      setSendingOtp(false)
+    }
+  }
+
+  const handleVerifyOtp = async () => {
+    if (!otp) {
+      setError("Please enter the OTP")
+      return
+    }
+
+    setVerifyingOtp(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          otp
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setOtpVerified(true)
+        setError("")
+      } else {
+        setError(result.error || "Invalid OTP")
+      }
+    } catch (error: any) {
+      setError("Failed to verify OTP. Please try again.")
+    } finally {
+      setVerifyingOtp(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    if (!otpVerified) {
+      setError("Please verify your email with OTP first")
+      return
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match")
@@ -45,6 +137,13 @@ export function RegisterForm() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleResendOtp = () => {
+    setOtpSent(false)
+    setOtpVerified(false)
+    setOtp("")
+    handleSendOtp()
   }
 
   return (
@@ -69,6 +168,7 @@ export function RegisterForm() {
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               required 
+              disabled={otpVerified}
             />
           </div>
 
@@ -80,6 +180,7 @@ export function RegisterForm() {
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               required 
+              disabled={otpVerified}
             />
           </div>
 
@@ -91,6 +192,7 @@ export function RegisterForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={otpVerified}
             />
           </div>
 
@@ -102,12 +204,69 @@ export function RegisterForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              disabled={otpVerified}
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating Account..." : "Create Account"}
-          </Button>
+          {!otpSent ? (
+            <Button 
+              type="button" 
+              className="w-full" 
+              onClick={handleSendOtp}
+              disabled={sendingOtp || !email || !name || password !== confirmPassword || password.length < 6}
+            >
+              {sendingOtp ? "Sending OTP..." : "Send OTP"}
+            </Button>
+          ) : !otpVerified ? (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="otp">Enter OTP</Label>
+                <Input
+                  id="otp"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter 6-digit code"
+                  maxLength={6}
+                  required
+                />
+                <p className="text-sm text-muted-foreground">
+                  We've sent a 6-digit code to {email}
+                </p>
+              </div>
+
+              <div className="flex space-x-2">
+                <Button 
+                  type="button" 
+                  className="flex-1" 
+                  onClick={handleVerifyOtp}
+                  disabled={verifyingOtp || !otp}
+                >
+                  {verifyingOtp ? "Verifying..." : "Verify OTP"}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleResendOtp}
+                  disabled={sendingOtp}
+                >
+                  {sendingOtp ? "Sending..." : "Resend"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <Alert>
+                <AlertDescription className="text-green-600">
+                  ✅ Email verified successfully! You can now create your account.
+                </AlertDescription>
+              </Alert>
+              
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Creating Account..." : "Create Account"}
+              </Button>
+            </div>
+          )}
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
