@@ -5,10 +5,8 @@ import { createContext, useContext, useEffect, useState } from "react"
 import {
   type User,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile,
 } from "firebase/auth"
 
 let auth: any = null
@@ -23,7 +21,6 @@ interface AuthContextType {
   user: User | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, name: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -56,11 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password)
   }
 
-  const signUp = async (email: string, password: string, name: string) => {
-    if (!auth) throw new Error("Firebase not initialized")
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
-    await updateProfile(user, { displayName: name })
-  }
+
 
   const logout = async () => {
     if (!auth) throw new Error("Firebase not initialized")
@@ -71,7 +64,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     signIn,
-    signUp,
     logout,
   }
 

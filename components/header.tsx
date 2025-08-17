@@ -107,7 +107,7 @@ export function Header() {
                   <Link href="/login">Sign In</Link>
                 </Button>
                 <Button size="sm" asChild>
-                  <Link href="/register">Sign Up</Link>
+      
                 </Button>
               </div>
             )}
