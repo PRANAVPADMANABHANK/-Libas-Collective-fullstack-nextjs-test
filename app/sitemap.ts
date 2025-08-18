@@ -5,7 +5,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getAllProducts()
 
   const productUrls = products.map((product) => ({
-    url: `https://shophub.com/products/${product.slug}`,
+    url: `https://libascollective.com/products/${product.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.8,
@@ -13,25 +13,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: "https://shophub.com",
+      url: "https://libascollective.com",
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: "https://shophub.com/products",
+      url: "https://libascollective.com/products",
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: "https://shophub.com/search",
+      url: "https://libascollective.com/search",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: "https://shophub.com/cart",
+      url: "https://libascollective.com/cart",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,

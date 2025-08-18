@@ -9,11 +9,11 @@ import { StructuredData } from "@/components/structured-data"
 
 export const metadata: Metadata = {
   title: {
-    default: "ShopHub - Premium E-commerce Store",
-    template: "%s | ShopHub",
+    default: "Libas Collective - Premium E-commerce Store",
+    template: "%s | Libas Collective",
   },
   description:
-    "Discover premium products at ShopHub. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
+    "Discover premium products at Libas Collective. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
   keywords: [
     "e-commerce",
     "online shopping",
@@ -23,42 +23,42 @@ export const metadata: Metadata = {
     "premium products",
     "fast shipping",
   ],
-  authors: [{ name: "ShopHub Team" }],
-  creator: "ShopHub",
-  publisher: "ShopHub",
+  authors: [{ name: "Libas Collective Team" }],
+  creator: "Libas Collective",
+  publisher: "Libas Collective",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://shophub.com"),
+  metadataBase: new URL("https://libascollective.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://shophub.com",
-    title: "ShopHub - Premium E-commerce Store",
+    url: "https://libascollective.com",
+    title: "Libas Collective - Premium E-commerce Store",
     description:
-      "Discover premium products at ShopHub. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
-    siteName: "ShopHub",
+      "Discover premium products at Libas Collective. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
+    siteName: "Libas Collective",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "ShopHub - Premium E-commerce Store",
+        alt: "Libas Collective - Premium E-commerce Store",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopHub - Premium E-commerce Store",
+    title: "Libas Collective - Premium E-commerce Store",
     description:
-      "Discover premium products at ShopHub. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
+      "Discover premium products at Libas Collective. From electronics to fashion, find everything you need with fast shipping and excellent customer service.",
     images: ["/og-image.png"],
-    creator: "@shophub",
+    creator: "@libascollective",
   },
   robots: {
     index: true,

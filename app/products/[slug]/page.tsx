@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     }
   }
 
-  const title = product.seoTitle || `${product.name} - ShopHub`
+  const title = product.seoTitle || `${product.name} - Libas Collective`
   const description = product.seoDescription || product.description
   const images = [
     {
@@ -50,9 +50,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       title,
       description,
       type: "website",
-      url: `https://shophub.com/products/${product.slug}`,
+      url: `https://libascollective.com/products/${product.slug}`,
       images,
-      siteName: "ShopHub",
+      siteName: "Libas Collective",
     },
     twitter: {
       card: "summary_large_image",
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       images: [product.image || "/placeholder.svg"],
     },
     alternates: {
-      canonical: `https://shophub.com/products/${product.slug}`,
+      canonical: `https://libascollective.com/products/${product.slug}`,
     },
   }
 }

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/admin/", "/_next/", "/cart"],
     },
-    sitemap: "https://shophub.com/sitemap.xml",
+    sitemap: "https://libascollective.com/sitemap.xml",
   }
 }

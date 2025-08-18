@@ -47,7 +47,7 @@ export function Header() {
         {/* Desktop Header */}
         <div className="hidden md:flex items-center justify-between gap-4">
           <Link href="/" className="text-2xl font-bold flex-shrink-0">
-            ShopHub
+            Libas Collective
           </Link>
 
           <form onSubmit={handleSearch} className="flex-1 max-w-md mx-4">
@@ -123,7 +123,7 @@ export function Header() {
         {/* Mobile Header */}
         <div className="md:hidden flex items-center justify-between gap-2">
           <Link href="/" className="text-xl font-bold flex-shrink-0">
-            ShopHub
+            Libas Collective
           </Link>
 
           <div className="flex items-center gap-2">

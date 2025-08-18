@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer"
 import { FavoritesContent } from "@/components/favorites-content"
 
 export const metadata: Metadata = {
-  title: "My Favorites - ShopHub",
+  title: "My Favorites - Libas Collective",
   description: "View and manage your favorite products",
 }
 
