@@ -1,11 +1,12 @@
 # Libas Collective - E-commerce Platform
 
-A modern e-commerce platform built with Next.js, featuring user authentication, product management, shopping cart functionality, and email notifications.
+A modern e-commerce platform built with Next.js, featuring secure user authentication with OTP verification, product management, shopping cart functionality, and email notifications.
 
 ## Features
 
 ### 🔐 Authentication & Security
 - **Firebase Authentication**: Secure user registration and login
+- **OTP Verification**: Email-based one-time password verification for enhanced security
 - **Protected Routes**: Secure access to user-specific features
 - **User Management**: Profile management and account settings
 
@@ -16,6 +17,7 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 - **User Dashboard**: Personal account management
 
 ### 📧 Email System
+- **OTP Emails**: Secure verification codes sent via email
 - **Welcome Emails**: Automated welcome messages for new users
 - **Resend Integration**: Professional email delivery service
 - **Email Notifications**: User-friendly email communications
@@ -26,13 +28,20 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 - **Real-time Updates**: Live cart and favorites updates
 - **Search Functionality**: Advanced product search and filtering
 
+### ⚡ Performance & SEO
+- **Server-Side Rendering (SSR)**: Dynamic content rendering for optimal performance
+- **Static Site Generation (SSG)**: Pre-built pages for faster loading
+- **SEO Optimized**: Meta tags, structured data, and sitemap generation
+- **Fast Loading**: Optimized images and code splitting
+
 ## Tech Stack
 
 - **Frontend**: Next.js 14, React, TypeScript
 - **Styling**: Tailwind CSS, shadcn/ui components
-- **Authentication**: Firebase Authentication
+- **Authentication**: Firebase Authentication with OTP verification
 - **Email Service**: Resend
 - **Database**: Firebase Firestore
+- **Rendering**: SSR (Server-Side Rendering) & SSG (Static Site Generation)
 - **Deployment**: Vercel (recommended)
 
 ## Getting Started
@@ -91,6 +100,7 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 ```
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
+│   │   ├── send-otp/      # OTP verification endpoints
 │   │   └── send-welcome-email/ # Welcome email endpoint
 │   ├── cart/              # Shopping cart page
 │   ├── favorites/         # User favorites page
@@ -100,6 +110,9 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 │   └── search/            # Search results page
 ├── components/            # React components
 │   ├── auth/              # Authentication components
+│   │   ├── login-form.tsx
+│   │   ├── register-form.tsx
+│   │   └── otp-verification-form.tsx
 │   ├── ui/                # Reusable UI components
 │   └── ...                # Feature-specific components
 ├── contexts/              # React contexts
@@ -110,16 +123,30 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 
 ## API Endpoints
 
+### Authentication & OTP
+- `POST /api/send-otp` - Send OTP verification code to user's email
+- `PUT /api/send-otp` - Verify OTP code and complete registration
+
 ### Email System
 - `POST /api/send-welcome-email` - Send welcome email to new users
 
 ## Key Features
 
-### User Registration Flow
-1. User fills registration form
-2. Account created in Firebase
-3. Welcome email sent automatically
-4. User redirected to home page
+### User Registration Flow with OTP
+1. User fills registration form with name, email, and password
+2. System sends 6-digit OTP code to user's email
+3. User enters OTP code in verification form
+4. OTP is verified (10-minute expiration)
+5. User account is created in Firebase
+6. Welcome email sent automatically
+7. User redirected to home page
+
+### OTP Security Features
+- **6-digit codes**: Secure random number generation
+- **10-minute expiration**: Time-limited verification codes
+- **Resend functionality**: Users can request new codes
+- **Email verification**: Ensures valid email addresses
+- **Rate limiting**: Prevents abuse (implemented in production)
 
 ### Shopping Cart
 - Persistent cart storage
@@ -133,6 +160,12 @@ A modern e-commerce platform built with Next.js, featuring user authentication, 
 - Product details with images
 - Related products suggestions
 
+### Performance Optimization
+- **SSR for Dynamic Content**: Product pages and search results rendered server-side
+- **SSG for Static Content**: Home page, category pages, and static content pre-built
+- **Image Optimization**: Next.js Image component for optimized loading
+- **Code Splitting**: Automatic code splitting for better performance
+
 ## Deployment
 
 ### Vercel (Recommended)
@@ -145,6 +178,12 @@ Ensure all environment variables are set in your production environment:
 - Firebase configuration
 - Resend API key
 - Firebase Admin credentials
+
+### Production Considerations
+- **OTP Storage**: In production, use Redis or database instead of in-memory storage
+- **Rate Limiting**: Implement proper rate limiting for OTP endpoints
+- **Email Templates**: Customize email templates for your brand
+- **Security**: Consider additional security measures like IP-based restrictions
 
 ## Contributing
 
