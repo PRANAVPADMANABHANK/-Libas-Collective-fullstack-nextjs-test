@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await updateProfile(user, { displayName: name })
     console.log('✅ User profile updated with display name')
     
-    // Call Cloud Function to send welcome email (only after OTP verification)
+    // Call Cloud Function to send welcome email
     try {
       console.log('📧 Calling Cloud Function to send welcome email...')
       const response = await fetch('/api/send-welcome-email', {
