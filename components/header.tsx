@@ -6,7 +6,7 @@ import Link from "next/link"
 import { ShoppingCart, Search, Heart, User, LogOut, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useCart } from "@/hooks/use-cart"
+import { useCartCount } from "@/hooks/use-cart-count"
 import { useFavorites } from "@/hooks/use-favorites"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 export function Header() {
-  const { totalItems } = useCart()
+  const { cartCount, isLoaded: cartLoaded } = useCartCount()
   const { totalFavorites } = useFavorites()
   const [searchQuery, setSearchQuery] = useState("")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -84,9 +84,9 @@ export function Header() {
             <Link href="/cart" className="relative">
               <Button variant="outline" size="sm">
                 <ShoppingCart className="h-4 w-4" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {totalItems}
+                {cartLoaded && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center animate-pulse">
+                    {cartCount}
                   </span>
                 )}
               </Button>
@@ -130,9 +130,9 @@ export function Header() {
             <Link href="/cart" className="relative">
               <Button variant="outline" size="sm">
                 <ShoppingCart className="h-4 w-4" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {totalItems}
+                {cartLoaded && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center animate-pulse">
+                    {cartCount}
                   </span>
                 )}
               </Button>

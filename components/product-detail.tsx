@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { ShoppingCart, Share2, Star } from "lucide-react"
+import { ShoppingCart, Share2, Star, Check } from "lucide-react"
 import { useCart } from "@/hooks/use-cart"
 import { FavoriteButton } from "@/components/favorite-button"
 import type { Product } from "@/lib/types"
@@ -18,10 +18,38 @@ interface ProductDetailProps {
 export function ProductDetail({ product }: ProductDetailProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(product.image || "/placeholder.svg")
-  const { addItem } = useCart()
+  const [isAddingToCart, setIsAddingToCart] = useState(false)
+  const [showAddedFeedback, setShowAddedFeedback] = useState(false)
+  const { addItem, getItemQuantity, isLoaded } = useCart()
 
-  const handleAddToCart = () => {
-    addItem(product, quantity)
+  const currentQuantity = getItemQuantity(product.id)
+
+  // Update current quantity when cart changes
+  useEffect(() => {
+    const newQuantity = getItemQuantity(product.id)
+    // Force re-render to show updated quantity
+  }, [getItemQuantity, product.id])
+
+  const handleAddToCart = async () => {
+    if (!product.inStock || isAddingToCart) return
+
+    setIsAddingToCart(true)
+    
+    try {
+      const success = addItem(product, quantity)
+      if (success) {
+        setShowAddedFeedback(true)
+        // Show feedback for 2 seconds
+        setTimeout(() => setShowAddedFeedback(false), 2000)
+        
+        // Add a small delay to show the loading state
+        await new Promise(resolve => setTimeout(resolve, 300))
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error)
+    } finally {
+      setIsAddingToCart(false)
+    }
   }
 
   const handleShare = async () => {
@@ -41,6 +69,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href)
+        // You could add a toast notification here
       } catch (error) {
         console.log("Error copying to clipboard:", error)
       }
@@ -127,6 +156,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Add to Cart Section */}
           <div className="space-y-4">
+            {currentQuantity > 0 && (
+              <div className="bg-green-50 border border-green-200 p-3 rounded-lg">
+                <p className="text-sm text-green-800 font-medium">
+                  ✅ You have {currentQuantity} of this item in your cart
+                </p>
+              </div>
+            )}
+
             <div className="flex items-center gap-4">
               <label htmlFor="quantity" className="font-medium">
                 Quantity:
@@ -147,9 +184,28 @@ export function ProductDetail({ product }: ProductDetailProps) {
             </div>
 
             <div className="flex gap-3">
-              <Button onClick={handleAddToCart} disabled={!product.inStock} className="flex-1" size="lg">
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                {product.inStock ? "Add to Cart" : "Out of Stock"}
+              <Button 
+                onClick={handleAddToCart} 
+                disabled={!product.inStock || isAddingToCart || !isLoaded} 
+                className="flex-1" 
+                size="lg"
+              >
+                {isAddingToCart ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Adding...
+                  </>
+                ) : showAddedFeedback ? (
+                  <>
+                    <Check className="h-4 w-4 mr-2" />
+                    Added!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    {product.inStock ? "Add to Cart" : "Out of Stock"}
+                  </>
+                )}
               </Button>
               <FavoriteButton productId={product.id} size="lg" />
               <Button variant="outline" size="lg" onClick={handleShare}>
