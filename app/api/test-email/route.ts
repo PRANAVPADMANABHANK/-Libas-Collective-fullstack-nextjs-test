@@ -37,16 +37,16 @@ export async function POST(request: NextRequest) {
       console.log('📮 Email details:', {
         from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
         to: email,
-        subject: 'Test Email from ShopHub! 🧪'
+        subject: 'Test Email from Libas Collective! 🧪'
       })
       
       const emailResult = await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
         to: email,
-        subject: 'Test Email from ShopHub! 🧪',
+        subject: 'Test Email from Libas Collective! 🧪',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #2563eb; text-align: center;">Test Email from ShopHub!</h1>
+            <h1 style="color: #2563eb; text-align: center;">Test Email from Libas Collective!</h1>
             <p>Hi ${displayName || 'there'},</p>
             <p>This is a <strong>TEST EMAIL</strong> to verify that email sending is working correctly!</p>
             <p>If you received this email, it means:</p>
@@ -59,10 +59,10 @@ export async function POST(request: NextRequest) {
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.FRONTEND_URL || 'https://yourdomain.com'}" 
                  style="background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-                Visit ShopHub
+                Visit Libas Collective
               </a>
             </div>
-            <p>Best regards,<br>The ShopHub Team</p>
+            <p>Best regards,<br>The Libas Collective Team</p>
           </div>
         `
       })

@@ -46,12 +46,12 @@ exports.sendWelcomeEmail = (0, identity_1.beforeUserCreated)(async (event) => {
             const emailData = {
                 from: fromEmail,
                 to: user.email,
-                subject: 'Welcome to ShopHub! 🎉',
+                subject: 'Welcome to Libas Collective! 🎉',
                 html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #2563eb; text-align: center;">Welcome to ShopHub!</h1>
+            <h1 style="color: #2563eb; text-align: center;">Welcome to Libas Collective!</h1>
             <p>Hi ${user.displayName || 'there'},</p>
-            <p>Thank you for creating an account with ShopHub! We're excited to have you on board.</p>
+            <p>Thank you for creating an account with Libas Collective! We're excited to have you on board.</p>
             <p>Here's what you can do with your new account:</p>
             <ul>
               <li>Browse our extensive product catalog</li>
@@ -67,7 +67,7 @@ exports.sendWelcomeEmail = (0, identity_1.beforeUserCreated)(async (event) => {
               </a>
             </div>
             <p>If you have any questions, feel free to reach out to our support team.</p>
-            <p>Best regards,<br>The ShopHub Team</p>
+            <p>Best regards,<br>The Libas Collective Team</p>
           </div>
         `
             };
@@ -360,12 +360,12 @@ exports.sendWelcomeEmailManual = (0, https_1.onRequest)(async (req, res) => {
         const emailData = {
             from: fromEmail,
             to: email,
-            subject: 'Welcome to ShopHub! 🎉',
+            subject: 'Welcome to Libas Collective! 🎉',
             html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #2563eb; text-align: center;">Welcome to ShopHub!</h1>
+          <h1 style="color: #2563eb; text-align: center;">Welcome to Libas Collective!</h1>
           <p>Hi ${displayName || 'there'},</p>
-          <p>Thank you for creating an account with ShopHub! We're excited to have you on board.</p>
+          <p>Thank you for creating an account with Libas Collective! We're excited to have you on board.</p>
           <p>Here's what you can do with your new account:</p>
           <ul>
             <li>Browse our extensive product catalog</li>
@@ -381,7 +381,7 @@ exports.sendWelcomeEmailManual = (0, https_1.onRequest)(async (req, res) => {
             </a>
           </div>
           <p>If you have any questions, feel free to reach out to our support team.</p>
-          <p>Best regards,<br>The ShopHub Team</p>
+          <p>Best regards,<br>The Libas Collective Team</p>
         </div>
       `
         };
