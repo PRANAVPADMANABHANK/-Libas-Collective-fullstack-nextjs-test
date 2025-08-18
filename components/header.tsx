@@ -85,7 +85,7 @@ export function Header() {
               <Button variant="outline" size="sm">
                 <ShoppingCart className="h-4 w-4" />
                 {cartLoaded && cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center animate-pulse">
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
@@ -131,7 +131,7 @@ export function Header() {
               <Button variant="outline" size="sm">
                 <ShoppingCart className="h-4 w-4" />
                 {cartLoaded && cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center animate-pulse">
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
