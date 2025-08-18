@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/contexts/auth-context"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { OTPVerificationForm } from "./otp-verification-form"
 
 export function RegisterForm() {
   const [name, setName] = useState("")
@@ -18,8 +19,11 @@ export function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showOTPVerification, setShowOTPVerification] = useState(false)
   const { signUp } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirect") || "/"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,13 +42,58 @@ export function RegisterForm() {
     setLoading(true)
 
     try {
-      await signUp(email, password, name)
-      router.push("/")
+      // Send OTP first
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setShowOTPVerification(true)
+      } else {
+        setError(result.error || "Failed to send verification code")
+      }
     } catch (error: any) {
-      setError(error.message || "Failed to create account")
+      setError("Failed to send verification code. Please try again.")
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleOTPVerificationSuccess = async () => {
+    try {
+      // Now create the user account
+      await signUp(email, password, name)
+      router.push(redirectTo)
+    } catch (error: any) {
+      setError(error.message || "Failed to create account")
+      setShowOTPVerification(false)
+    }
+  }
+
+  const handleBackToRegistration = () => {
+    setShowOTPVerification(false)
+    setError("")
+  }
+
+  // Show OTP verification form if OTP was sent
+  if (showOTPVerification) {
+    return (
+      <OTPVerificationForm
+        email={email}
+        name={name}
+        onVerificationSuccess={handleOTPVerificationSuccess}
+        onBack={handleBackToRegistration}
+      />
+    )
   }
 
   return (
@@ -106,12 +155,12 @@ export function RegisterForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? "Sending Code..." : "Send Verification Code"}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-primary hover:underline">
               Sign in
             </Link>
           </p>

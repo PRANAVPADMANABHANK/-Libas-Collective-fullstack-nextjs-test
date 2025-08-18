@@ -68,30 +68,30 @@ export function Header() {
               Products
             </Link>
 
-            {user && (
-              <>
-                <Link href="/favorites" className="relative">
-                  <Button variant="ghost" size="sm">
-                    <Heart className="h-4 w-4" />
-                    {totalFavorites > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                        {totalFavorites}
-                      </span>
-                    )}
-                  </Button>
-                </Link>
+            {/* Cart - visible for all users (guest and authenticated) */}
+            <Link href="/cart" className="relative">
+              <Button variant="outline" size="sm">
+                <ShoppingCart className="h-4 w-4" />
+                {cartLoaded && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
 
-                <Link href="/cart" className="relative">
-                  <Button variant="outline" size="sm">
-                    <ShoppingCart className="h-4 w-4" />
-                    {cartLoaded && cartCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                        {cartCount}
-                      </span>
-                    )}
-                  </Button>
-                </Link>
-              </>
+            {/* Favorites - only visible for authenticated users */}
+            {user && (
+              <Link href="/favorites" className="relative">
+                <Button variant="ghost" size="sm">
+                  <Heart className="h-4 w-4" />
+                  {totalFavorites > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                      {totalFavorites}
+                    </span>
+                  )}
+                </Button>
+              </Link>
             )}
 
             {user ? (
@@ -129,18 +129,17 @@ export function Header() {
           </Link>
 
           <div className="flex items-center gap-2">
-            {user && (
-              <Link href="/cart" className="relative">
-                <Button variant="outline" size="sm">
-                  <ShoppingCart className="h-4 w-4" />
-                  {cartLoaded && cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                      {cartCount}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-            )}
+            {/* Cart - visible for all users (guest and authenticated) */}
+            <Link href="/cart" className="relative">
+              <Button variant="outline" size="sm">
+                <ShoppingCart className="h-4 w-4" />
+                {cartLoaded && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
 
             <Button
               variant="ghost"
@@ -181,36 +180,36 @@ export function Header() {
                 Products
               </Link>
 
-              {user && (
-                <>
-                  <Link 
-                    href="/favorites" 
-                    className="flex items-center gap-2 px-2 py-2 rounded-md hover:bg-muted transition-colors"
-                    onClick={closeMobileMenu}
-                  >
-                    <Heart className="h-4 w-4" />
-                    <span>Favorites</span>
-                    {totalFavorites > 0 && (
-                      <span className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                        {totalFavorites}
-                      </span>
-                    )}
-                  </Link>
+              {/* Cart - visible for all users (guest and authenticated) */}
+              <Link 
+                href="/cart" 
+                className="flex items-center gap-2 px-2 py-2 rounded-md hover:bg-muted transition-colors"
+                onClick={closeMobileMenu}
+              >
+                <ShoppingCart className="h-4 w-4" />
+                <span>Cart</span>
+                {cartLoaded && cartCount > 0 && (
+                  <span className="bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
 
-                  <Link 
-                    href="/cart" 
-                    className="flex items-center gap-2 px-2 py-2 rounded-md hover:bg-muted transition-colors"
-                    onClick={closeMobileMenu}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    <span>Cart</span>
-                    {cartLoaded && cartCount > 0 && (
-                      <span className="bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                        {cartCount}
-                      </span>
-                    )}
-                  </Link>
-                </>
+              {/* Favorites - only visible for authenticated users */}
+              {user && (
+                <Link 
+                  href="/favorites" 
+                  className="flex items-center gap-2 px-2 py-2 rounded-md hover:bg-muted transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  <Heart className="h-4 w-4" />
+                  <span>Favorites</span>
+                  {totalFavorites > 0 && (
+                    <span className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                      {totalFavorites}
+                    </span>
+                  )}
+                </Link>
               )}
 
               {user ? (

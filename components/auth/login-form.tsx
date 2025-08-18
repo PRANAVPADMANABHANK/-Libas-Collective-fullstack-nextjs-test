@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,6 +19,8 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirect") || "/"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +29,7 @@ export function LoginForm() {
 
     try {
       await signIn(email, password)
-      router.push("/")
+      router.push(redirectTo)
     } catch (error: any) {
       setError(error.message || "Failed to sign in")
     } finally {
@@ -71,7 +73,7 @@ export function LoginForm() {
 
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link href="/register" className="text-primary hover:underline">
+            <Link href={`/register?redirect=${encodeURIComponent(redirectTo)}`} className="text-primary hover:underline">
               Sign up
             </Link>
           </p>

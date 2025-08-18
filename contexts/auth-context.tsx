@@ -9,6 +9,9 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  sendEmailVerification,
+  applyActionCode,
+  checkActionCode,
 } from "firebase/auth"
 
 let auth: any = null
@@ -24,6 +27,8 @@ interface AuthContextType {
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, name: string) => Promise<void>
+  sendVerificationEmail: () => Promise<void>
+  verifyEmail: (actionCode: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -100,11 +105,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signOut(auth)
   }
 
+  const sendVerificationEmail = async () => {
+    if (!auth || !auth.currentUser) throw new Error("No user logged in")
+    await sendEmailVerification(auth.currentUser)
+  }
+
+  const verifyEmail = async (actionCode: string) => {
+    if (!auth) throw new Error("Firebase not initialized")
+    await applyActionCode(auth, actionCode)
+  }
+
   const value = {
     user,
     loading,
     signIn,
     signUp,
+    sendVerificationEmail,
+    verifyEmail,
     logout,
   }
 
